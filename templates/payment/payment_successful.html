@@ -1,0 +1,56 @@
+{% extends "../store/base.html" %}
+{% load static %}
+{% block title %}Payment Successful{%endblock %}
+{% block content %}
+<style>
+    .account-form input {
+        border: 2px solid #ccc;
+        height: calc(2em + .75rem + 2px);
+    }
+
+    .account-form input:focus {
+        border-color: #1497ff;
+        box-shadow: none;
+    }
+</style>
+<div class="container">
+    <div class="col-12">
+        <h1 class="h2">Payment Successful</h1>
+    </div>
+    <div class="col-12">
+        <p>Order Summary</p>
+        {% for item in order.items.all %}
+        <div class="card mb-3 border-0">
+            <div class="row g-0">
+                <div class="col-md-2 d-none d-md-block">
+                    {% for image in item.product.product_image.all %}
+                    {% if image.is_feature %}
+                    <img class="img-fluid" alt="Responsive image" src="{{ image.image.url }}"
+                        alt="{{ image.image.alt_text }}">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="row pt-4">
+                    <div class="col-6 col-md fs15">
+                        <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">
+                            <p class="card-text small">{{item.product|title}}</p>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md fs15">Quantity: {{item.quantity}}
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <hr />
+    <div class="col-12">
+        <p>View all <a href='account:user_orders'>orders</a></p>
+    </div>
+</div>
+
+
+
+{% endblock %}
