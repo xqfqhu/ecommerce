@@ -4,18 +4,14 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib import messages
+from paypalcheckoutsdk.orders import OrdersGetRequest
 
-
-from paypalcheckoutsdk.orders import OrdersCaptureRequest
-from paypalcheckoutsdk.core import PayPalHttpClient, SandboxEnvironment
-
+from .paypal import PayPalClient
 from .models import DeliveryOptions
 from basket.basket import Basket
 from account.models import Address
 from order.models import Order, OrderItem
 
-CLIENT_ID = 'AVpfZG9llVun2lpUbvT3TkMArQGmiHqinQ_y9H-hsV56bpkJz6sv5Y0IbPpDxSurQsPC4rAcF6JUXQVE'
-SECRET = 'EIpxt_LgP5Ofy93IYWJm_eNmag8ntV6LrGLayqDlnLjdvWf4FM1G6WbVgz6t831S8Trq5VBKAGIfwTI-'
 
 @login_required
 def deliverychoices(request):
@@ -73,16 +69,18 @@ def payment_selection(request):
         return HttpResponseRedirect(referer)
     return render(request, 'payment/payment_selection.html',{})
 
+
 @login_required
 def payment_complete(request):
     if request.method == 'POST':
+        #import ipdb;ipdb.set_trace()
         
-        environment = SandboxEnvironment(client_id=CLIENT_ID, client_secret=SECRET)
-        client = PayPalHttpClient(environment)
-        
+        PPClient = PayPalClient()
         orderID = request.POST.get('orderID')
-        request_order = OrdersCaptureRequest(orderID)
-        response = client.execute(request_order)
+        request_order = OrdersGetRequest(orderID)
+        
+        response = PPClient.client.execute(request_order)
+
         
         basket = Basket(request)
 
@@ -94,7 +92,7 @@ def payment_complete(request):
             address2=response.result.purchase_units[0].shipping.address.admin_area_2,
             postal_code=response.result.purchase_units[0].shipping.address.postal_code,
             country_code=response.result.purchase_units[0].shipping.address.country_code,
-            total_paid = Decimal(response.result.purchase_units[0].payments.captures[0].amount.value),
+            total_paid = Decimal(response.result.purchase_units[0].amount.value),
             order_key=response.result.id,
             payment_option="paypal",
             billing_status=True,
@@ -123,5 +121,6 @@ def payment_successful(request):
     orderID = request.GET.get('order')
 
     order = get_object_or_404(Order, order_key=orderID)
+    
     return render(request, 'payment/payment_successful.html', {'order':order})
 
