@@ -1,20 +1,35 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
-
+from itertools import chain
+class ProductManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True)
 # Create your models here.
 class Category(models.Model):
+    parent = models.ForeignKey('self', related_name = 'children', on_delete = models.CASCADE, blank = True, null = True)
     name = models.CharField(max_length = 225,db_index=True)
     slug = models.SlugField(max_length = 225, unique = True)
+    introduction = models.CharField(max_length = 500, null = True, blank = True)
     # A "slug" is a way of generating a valid URL, generally using data already obtained.
     class Meta:
         verbose_name_plural = 'categories'
         # by default, django will have 'categorys' as the plural form
     def __str__(self):
         return self.name
-    def get_absolute_url(self):
-        return reverse("store:category_list", args = [self.slug])
-    
+
+    def _recurse_for_children(self, cat_obj):
+        c_list = [cat_obj]
+        children = cat_obj.children.all()
+        if children.count() != 0:
+            for child in children:
+                more = self._recurse_for_children(child)
+                c_list.extend(more)
+        return c_list
+    def recurse_children(self):
+        c_list = self._recurse_for_children(self)
+        return c_list
+            
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name = 'product', on_delete = models.CASCADE)
     # if you define a foreign field in a table, the table will have an entry called foreignField_id
@@ -22,7 +37,8 @@ class Product(models.Model):
     # see test_views.py for details
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, related_name = 'product_creator')
     title = models.CharField(max_length = 225)
-    author = models.CharField(max_length = 225)
+    author = models.CharField(max_length = 225, blank = True)
+    compiler = models.CharField(max_length = 225, blank = True)
     description = models.TextField(blank = True)
     # TextField allows more char than CharField
     image = models.ImageField(upload_to = 'images/')
@@ -35,7 +51,10 @@ class Product(models.Model):
     # triggered and recorded when added
     updated = models.DateTimeField(auto_now = True)
     # triggered and recorded when updated
+    objects = models.Manager()
+    products = ProductManager()
     class Meta:
+        verbose_name_plural = 'Products'
         ordering = ('-created', )
         # -created means descending order in terms of created
         # created means ascending order in terms of created
@@ -43,4 +62,4 @@ class Product(models.Model):
         return self.title
     def get_absolute_url(self):
         return reverse('store:product_detail', args = [self.slug])
-    
+
