@@ -1,7 +1,7 @@
 {%extends "base.html" %}
 <!--so that home.html is an extension of base.html-->
-{% load static %} 
-{% block title%} 
+{% load static %}
+{% block title%}
 {% if category %}{{category.name}} {%else%}Products{%endif%}
 {% endblock %}
 <!--now you can overwrite any block in base.html-->
@@ -13,145 +13,86 @@
 
 <div class="container">
   <header>
-    <div class=" h5 d-flex justify-content-center"> {{category.name}} </div>
-    {% if category.introduction is not None%}
-    <div class="pb-3 h7 d-flex justify-content-center"> {{category.introduction}} </div>
-    {%endif%}
-    <div class="d-flex justify-content-center">
+    <div class="category-name">
+      {% if category is not None%}
+      <div class=" h5 d-flex justify-content-center"> {{category.name}} </div>
 
-      <a class="filter-button" data-bs-toggle="collapse" href="#refinements-filter" role="button" aria-expanded="false"
-        aria-controls="refinements-filter">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders"
-          viewBox="0 0 16 16">
-          <path fill-rule="evenodd"
-            d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
-        </svg>
-        Filter (0)
-      </a>
+      {% endif%}
+      {% if category.introduction is not None%}
+      <div class="pb-3 h7 d-flex justify-content-center"> {{category.introduction}} </div>
+      {%endif%}
     </div>
+    <div class="row">
+      <div class="d-flex justify-content-center">
+        <a class="filter-button" data-bs-toggle="collapse" href="#refinements-filter" role="button"
+          aria-expanded="false" aria-controls="refinements-filter">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
+          </svg>
+          Filter (0)
+        </a>
+      </div>
 
-    <div id="refinements-filter" class="collapse sidebar left-nav mb-md-l mb-sm-s mt-md--l mt-sm--s" aria-expanded="false">
-      <div class="sidebar__section refinements">
-
-        <span class="augHeader" data-bs-toggle="collapse" href="#sidebar-section-0" aria-expanded="false" role="button" tabindex="0" aria-controls="sidebar-section-0">
-          <h2 class="h2-as-h6"> Subjects</h2>
-          <span class="icon-minus icon-minus-arrow"></span>
-        </span>
+      <div class="collapse" id="refinements-filter" data-bs-toggle="collapse" href="#refinements-filter-subjects">
+        <span class="d-flex justify-content-center">Subjects</span>
         
-        <div id="sidebar-section-0" class="collapse">
-        {% for child in category.children.all%}
-        
-
-        <a href="&category={{child.slug}}">{{child}}</a>
+        {%if category is not None%}
+        {%if category.children is not None%}
+        {% for c in category.children.all%}
+        <div class="collapse" id="refinements-filter-subjects">
+           <a href="{% url 'store:search' %}?category={{c.slug}}&keyword={{keyword}} "><span class="d-flex justify-content-center">{{c.name}}</span></a>
+        </div>
         {%endfor%}
+        {%endif%}
+        
+        {%else%}
+        {% for c in categories%}
+        {% if c.parent is None%}
+        <div class="collapse" id="refinements-filter-subjects">
+          <a href="{% url 'store:search' %}?category={{c.slug}}&keyword={{keyword}} "><span class="d-flex justify-content-center">{{c.name}}</span></a>
+        </div>
+        {% endif %}
+        {%endfor%}
+        {%endif%}
+
+
+      </div>
+      <div class="collapse " id="refinements-filter" data-bs-toggle="collapse" href="#refinements-filter-prices">
+        <span class="d-flex justify-content-center">Prices</span>
+        <div class="collapse" id="refinements-filter-prices">
+          <span class="d-flex justify-content-center">Under $5</span>
+        </div>
+        <div class="collapse" id="refinements-filter-prices">
+          <span class="d-flex justify-content-center">$5 - $10</span>
+        </div>
+        <div class="collapse" id="refinements-filter-prices">
+          <span class="d-flex justify-content-center">$10 - $25</span>
+        </div>
+        <div class="collapse" id="refinements-filter-prices">
+          <span class="d-flex justify-content-center">$25-$50</span>
+        </div>
+        <div class="collapse" id="refinements-filter-prices">
+          <span class="d-flex justify-content-center">Over %50</span>
         </div>
       </div>
-      <div class="sidebar__section refinements">
-        <span class="augHeader" data-toggle="collapse" data-target="#sidebar-section-1" aria-expanded="false"
-          role="button" tabindex="0">
-          <h2 class="h2-as-h6"> Prices</h2>
-          <span class="icon-minus icon-minus-arrow"></span>
-        </span>
-        <ul class="lists lists--unstyled" id="sidebar-section-1" aria-expanded="false" style="display: none;">
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow" href="/b/books/science-technology/_/N-cZ29Z8q8Z184l">Under
-              $5</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow" href="/b/books/science-technology/_/N-3Z29Z8q8Z184l">$5 -
-              $10</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow" href="/b/books/science-technology/_/N-4Z29Z8q8Z184l">$10 -
-              $25</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow" href="/b/books/science-technology/_/N-5Z29Z8q8Z184l">$25 -
-              $50</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow" href="/b/books/science-technology/_/N-6Z29Z8q8Z184l">Over
-              $50</a></li>
-        </ul>
+      <div class="collapse justify-content-center" id="refinements-filter">
+        <span class="d-flex justify-content-center">Ages</span>
       </div>
-      <div class="sidebar__section refinements">
-        <span class="augHeader" data-toggle="collapse" data-target="#sidebar-section-2" aria-expanded="false"
-          role="button" tabindex="0">
-          <h2 class="h2-as-h6"> Formats</h2>
-          <span class="icon-plus icon-plus-arrow"></span>
-        </span>
-        <ul class="lists lists--unstyled" id="sidebar-section-2" aria-expanded="false" style="display: none;">
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z141tjZ29Z8q8Z184l">Paperback</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z141jfZ29Z8q8Z184l">Hardcover</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow" href="/b/books/science-technology/_/N-1z13q39Z29Z8q8Z184l">NOOK
-              Book</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z141wcZ29Z8q8Z184l">Other Format</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z13ximZ29Z8q8Z184l">Multimedia</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z13w9tZ29Z8q8Z184l">Audio CD</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z13u22Z29Z8q8Z184l">Audio Other</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z13rfaZ29Z8q8Z184l">Multimedia Set</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z13op7Z29Z8q8Z184l">Large Print</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z13kc1Z29Z8q8Z184l">Chart</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z0zv7jZ29Z8q8Z184l">Audio MP3 on CD</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z0zv7gZ29Z8q8Z184l">Board Book</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow" href="/b/books/science-technology/_/N-1z0zu85Z29Z8q8Z184l">BN
-              Exclusive</a></li>
-          <li>
-            <a class="bread-crumbs__item" rel="nofollow"
-              href="/b/books/science-technology/_/N-1z0zta0Z29Z8q8Z184l">Signed Book</a></li>
-        </ul>
+
+      {%if keyword is not None%}
+      <div>
+        Showing {{products|length}} results for <strong>{{keyword}}</strong>
       </div>
-      <div class="sidebar__section refinements">
-        <span class="augHeader" data-toggle="collapse" data-target="#sidebar-section-3" aria-expanded="false"
-          role="button" tabindex="0">
-          <h2 class="h2-as-h6"> Ages</h2>
-          <span class="icon-plus icon-plus-arrow"></span>
-        </span>
-        <ul class="lists lists--unstyled" id="sidebar-section-3" aria-expanded="false" style="display: none;">
-          <li>
-            <a class="bread-crumbs__item" rel="" href="/b/books/science-technology/_/N-7Z29Z8q8Z184l">0 - 2 Years</a>
-          </li>
-          <li>
-            <a class="bread-crumbs__item" rel="" href="/b/books/science-technology/_/N-8Z29Z8q8Z184l">3 - 5 Years</a>
-          </li>
-          <li>
-            <a class="bread-crumbs__item" rel="" href="/b/books/science-technology/_/N-9Z29Z8q8Z184l">6 - 8 Years</a>
-          </li>
-          <li>
-            <a class="bread-crumbs__item" rel="" href="/b/books/science-technology/_/N-aZ29Z8q8Z184l">9 - 12 Years</a>
-          </li>
-          <li>
-            <a class="bread-crumbs__item" rel="" href="/b/books/science-technology/_/N-bZ29Z8q8Z184l">Teens</a></li>
-        </ul>
-      </div>
-      <div class="sidebar__section refinements">
-      </div>
-    </div>
-    <hr>
+      {%endif%}
+      <hr>
+
   </header>
 
   {% if not products %}
-  <div class='col-12'>There are currently no products active. Go back to <a href="{% url 'store:store_home' %}">Home</a></div>
+  <div class='col-12'>There are currently no products active. Go back to <a href="{% url 'store:store_home' %}">Home</a>
+  </div>
   {% else%}
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     {% for product in products %}
@@ -172,7 +113,7 @@
         </div>
       </div>
     </div>
-    {% endfor %} 
+    {% endfor %}
   </div>
   {%endif%}
 </div>
