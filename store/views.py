@@ -29,36 +29,51 @@ def search(request):
         
     return {'search_form':search_form}
 def conduct_search(request):
+    next_context = {}
+    price_range_option = [0,5,10,25,50]
+    num_range = len(price_range_option) 
     
-        
-
-    category_slug = request.GET.get('category')
+    
     if "keyword" in request.GET:
         keyword = request.GET.get('keyword')
+        if keyword != "":
+            next_context['keyword'] = keyword
     else:
         keyword = ""
+    products = Product.products.filter(title__contains=keyword) | \
+        Product.products.filter(author__contains=keyword) | \
+            Product.products.filter(compiler__contains = keyword) | \
+                Product.products.filter(description__contains=keyword)
 
 
+    category_slug = request.GET.get('category')
     if category_slug != "all":
         category = get_object_or_404(Category, slug = category_slug)
-                
+    
         category_recurse = category.recurse_children()
-        products = Product.products.filter(
-            category__in=category_recurse) & \
-                (Product.products.filter(title__contains=keyword) | \
-                    Product.products.filter(author__contains=keyword) | \
-                        Product.products.filter(compiler__contains = keyword) | \
-                            Product.products.filter(description__contains=keyword))
+        products = Product.products.filter(category__in=category_recurse) & products
+        next_context['category'] = category
 
-        response = render(request, 'store/category.html', {'products': products, 'category': category,  'keyword': keyword})
-        return response
-                
-    else:
-        products = Product.products.filter(title__contains=keyword) | \
-                    Product.products.filter(author__contains=keyword) | \
-                        Product.products.filter(compiler__contains = keyword) | \
-                            Product.products.filter(description__contains=keyword)
-        return render(request, 'store/category.html', {'products': products,  'keyword': keyword})
+
+    if "price-range" in request.GET:
+        next_context['price-range'] = request.GET.get('price-range')
+        price_range_idx = int(request.GET.get('price-range'))
+        
+        floor = price_range_option[price_range_idx-1]
+        products = Product.products.filter(price__gte=floor) & products
+        if price_range_idx < num_range:
+            ceiling = price_range_option[price_range_idx]
+            products = Product.products.filter(price__lte=ceiling) & products
+    next_context['products'] = products
+    return render(request, 'store/category.html',next_context)
+        
+
+    
+            
+        
+
+    
+    return response
                 
             
     
