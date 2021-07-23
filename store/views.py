@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product
 from .forms import searchForm
+from django.http import HttpResponseRedirect
 # Create your views here.
 
 
@@ -64,8 +65,14 @@ def conduct_search(request):
         if price_range_idx < num_range:
             ceiling = price_range_option[price_range_idx]
             products = Product.products.filter(price__lte=ceiling) & products
-    next_context['products'] = products
-    return render(request, 'store/category.html',next_context)
+
+    
+    if len(next_context) == 0:
+        
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        next_context['products'] = products
+        return render(request, 'store/category.html',next_context)
         
 
     
