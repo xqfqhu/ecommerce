@@ -102,75 +102,10 @@ class UserEditForm(forms.ModelForm):
                                     }
                                 )
                             )
-    first_name = forms.CharField(
-        label = 'First Name',
-        max_length = 150, 
-        widget = forms.TextInput(
-            attrs = {
-                'class': 'form-control mb-3',
-                'placeholder': 'Firstname',
-                'id': 'form-firstname',
-                }))
-    about = forms.CharField(
-        label = 'About', 
-        max_length = 500,
-        widget = forms.Textarea(
-        attrs = {
-            'class': 'form-control mb-3',
-            'placeholder': 'About',
-            'id': 'form-about',
-            }))
-    country = CountryField()
-    phone_number = forms.CharField(
-        label = 'Phone Number',
-        max_length=15,
-        widget = forms.TextInput(
-        attrs = {
-            'class': 'form-control mb-3',
-            'placeholder': 'Phone Number',
-            'id': 'form-phone',
-            }))
-
-    postcode = forms.CharField(
-        label = 'Post Code',
-        max_length = 12,
-        widget = forms.TextInput(
-        attrs = {
-            'class': 'form-control mb-3',
-            'placeholder': 'Post Code',
-            'id': 'form-postcode',
-            }))
-    address_line_1 = forms.CharField(
-        max_length = 150,
-        label = 'Address Line 1',
-        widget = forms.TextInput(
-        attrs = {
-            'class': 'form-control mb-3',
-            'placeholder': 'Address Line 1',
-            'id': 'form-address1',
-            }))
-    address_line_2 = forms.CharField(
-        max_length = 150,
-        label = 'Address Line 2',
-        widget = forms.TextInput(
-        attrs = {
-            'class': 'form-control mb-3',
-            'placeholder': 'Address Line 2',
-            'id': 'form-address2',
-            }))
-    town_city = forms.CharField(
-        max_length = 150,
-        label = 'City or Town',
-        widget = forms.TextInput(
-        attrs = {
-            'class': 'form-control mb-3',
-            'placeholder': 'City/Town',
-            'id': 'form-address2',
-            }))
+    
     class Meta:
         model = UserBase
-        fields = ('email', 'user_name', 'first_name', 'about', 'country', 'phone_number',
-        'town_city', 'address_line_2', 'address_line_1', 'postcode')
+        fields = ('email', 'user_name')
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for _key in self.fields:
@@ -179,10 +114,7 @@ class UserEditForm(forms.ModelForm):
             else:
                 self.fields[_key].required = False
         
-        self.fields['country'].widget.attrs.update({
-            'class': 'form-control mb-3',
-            'id': 'form-country',
-            })
+        
 
 class PwdResetForm(PasswordResetForm):
     email= forms.EmailField(

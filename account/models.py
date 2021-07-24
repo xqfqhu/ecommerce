@@ -38,15 +38,7 @@ class CustomAccountManager(BaseUserManager):
 class UserBase(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique = True)
     user_name = models.CharField(max_length = 150, unique = True)
-    first_name = models.CharField(max_length = 150, blank = True)
-    about = models.TextField(_('about'), max_length = 500, blank = True)
-    country = CountryField()
     phone_number = models.CharField(max_length=15, blank=True)
-    postcode = models.CharField(max_length = 12, blank = True)
-    address_line_1 = models.CharField(max_length = 150, blank = True)
-    address_line_2 = models.CharField(max_length = 150, blank = True)
-    town_city = models.CharField(max_length = 150, blank = True)
-
     is_active = models.BooleanField(default = False)
     is_staff = models.BooleanField(default = False)
     created = models.DateTimeField(auto_now_add = True)
@@ -63,7 +55,7 @@ class UserBase(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.user_name
     def email_user(self, subject, message):
-        send_mail(subject, message, 'xqfq@gmail.com', [self.email], fail_silently = False)
+        send_mail(subject, message, 'xqfqhu@gmail.com', [self.email], fail_silently = False)
 
 class Address(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
