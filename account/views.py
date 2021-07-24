@@ -166,7 +166,7 @@ def edit_address(request, address_id):
 
         address = get_object_or_404(Address, id = address_id)
         address_form = AddressForm(instance = address, data = request.POST)
-        return render(request, 'account/user/edit_address.html', {'form': address_form, 'address':address}) 
+        return HttpResponseRedirect(reverse('account:addresses')) 
 
 @login_required
 def set_default(request, address_id):
