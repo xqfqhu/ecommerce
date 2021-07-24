@@ -35,19 +35,19 @@ class Basket():
         total = 0
         for item in self.basket.values():
             total += float(item['price']) * float(item['qty'])
-        return total
+        return round(total,2)
     def get_delivery_price(self):
         subtotal = self.get_subtotal_price()
         delivery_price = 0
         if subtotal != 0 and 'purchase' in self.session:
             
             delivery_price = DeliveryOptions.objects.get(id = self.session['purchase']['delivery_id']).delivery_price
-        return delivery_price
+        return round(delivery_price,2)
     def get_total_price(self):
         subtotal = self.get_subtotal_price()
         delivery_price = self.get_delivery_price()
         
-        return float(subtotal) + float(delivery_price)
+        return round(float(subtotal) + float(delivery_price),2)
 
     def __iter__(self):
         product_ids = self.basket.keys()
