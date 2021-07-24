@@ -143,15 +143,14 @@ def view_address(request):
 
 
 @login_required
-def delete_address(request):
-    if request.method == 'POST':
-        address_id = request.POST.get('address')
-        address = get_object_or_404(Address, id = address_id)
-        address.delete()
-        addresses = Address.objects.filter(customer=request.user)
-        address_qty = str(len(addresses))
-        response = JsonResponse({'address_qty': address_qty})
-        return response
+def delete_address(request, address_id):
+    
+    address = get_object_or_404(Address, id = address_id)
+    address.delete()
+    addresses = Address.objects.filter(customer=request.user)
+    address_qty = str(len(addresses))
+    response = JsonResponse({'address_qty': address_qty})
+    return response
 
 @login_required
 def edit_address(request, address_id):
