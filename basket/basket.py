@@ -12,19 +12,20 @@ class Basket():
         else:
             self.basket = self.session['basket']
     def add(self, product, product_qty):
-        product_id = product.id
+        product_id = str(product.id)
 
-        if str(product_id) not in self.basket:
-            self.basket[str(product_id)] = {'price': str(product.price), 'qty': product_qty}
+        if product_id not in self.basket:
+            self.basket[product_id] = {'price': str(product.price), 'qty': product_qty}
         else:
-            self.basket[str(product_id)]['qty'] += product_qty
+            self.basket[product_id]['qty'] += product_qty
         self.session.modified = True
     def delete(self, product):
-        product_id = product.id
-        if str(product_id) not in self.basket:
+        product_id = str(product.id)
+        if product_id not in self.basket:
             return
         else:
-            self.basket[str(product_id)]['qty'] = 0
+            
+            del self.basket[product_id]
             self.session.modified = True
             return
     def __len__(self):
