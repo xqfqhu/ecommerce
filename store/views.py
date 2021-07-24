@@ -41,19 +41,30 @@ def conduct_search(request):
             next_context['keyword'] = keyword
     else:
         keyword = ""
-    products = Product.products.filter(title__contains=keyword) | \
-        Product.products.filter(author__contains=keyword) | \
-            Product.products.filter(compiler__contains = keyword) | \
-                Product.products.filter(description__contains=keyword)
+    if keyword != "":
+        products = Product.products.filter(title__contains=keyword) | \
+            Product.products.filter(author__contains=keyword) | \
+                Product.products.filter(compiler__contains = keyword) | \
+                    Product.products.filter(description__contains=keyword)
+    else:
+        products = Product.products.all()
 
-
+    
     category_slug = request.GET.get('category')
     if category_slug != "all":
         category = get_object_or_404(Category, slug = category_slug)
     
-        category_recurse = category.recurse_children()
-        products = Product.products.filter(category__in=category_recurse) & products
+        children = category.recurse_children()
+        recurse_children = children.get("recurse_children")
+        instant_children = children.get("instant_children")
+        products = products.filter(category__in=recurse_children+[category])
         next_context['category'] = category
+        if len(instant_children) != 0:
+            next_context['category_children'] = instant_children
+    else:
+        instant_children = Category.objects.all()
+        if len(instant_children) != 0:
+            next_context['category_children'] = instant_children
 
 
     if "price-range" in request.GET:
@@ -61,10 +72,10 @@ def conduct_search(request):
         price_range_idx = int(request.GET.get('price-range'))
         
         floor = price_range_option[price_range_idx-1]
-        products = Product.products.filter(price__gte=floor) & products
+        products = products.filter(price__gte=floor) & products
         if price_range_idx < num_range:
             ceiling = price_range_option[price_range_idx]
-            products = Product.products.filter(price__lte=ceiling) & products
+            products = products.filter(price__lte=ceiling) & products
 
     
     if len(next_context) == 0:

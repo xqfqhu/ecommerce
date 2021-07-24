@@ -37,87 +37,87 @@
 
       <div class="collapse" id="refinements-filter" data-bs-toggle="collapse" href="#refinements-filter-subjects">
         <span class="d-flex justify-content-center">Subjects</span>
+
         
-        {%if category is not None%}
-        {%if category.children is not None%}
-        {% for c in category.children.all%}
+        {%if category_children is not None%}
+        {% for c in category_children%}
         <div class="collapse" id="refinements-filter-subjects">
-          
+
           {%if not keyword and not price_range%}
-           <a href="{% url 'store:search' %}?category={{c.slug}} "><span class="d-flex justify-content-center">{{c.name}}</span></a>
+          <a href="{% url 'store:search' %}?category={{c.slug}} "><span
+              class="d-flex justify-content-center">{{c.name}}</span></a>
           {%elif not price_range%}
-          <a href="{% url 'store:search' %}?category={{c.slug}}&keyword={{keyword}} "><span class="d-flex justify-content-center">{{c.name}}</span></a>
+          <a href="{% url 'store:search' %}?category={{c.slug}}&keyword={{keyword}} "><span
+              class="d-flex justify-content-center">{{c.name}}</span></a>
           {%else %}
-          <a href="{% url 'store:search' %}?category={{c.slug}}&keyword={{keyword}}&price-range={{price_range}} "><span class="d-flex justify-content-center">{{c.name}}</span></a>
+          <a href="{% url 'store:search' %}?category={{c.slug}}&keyword={{keyword}}&price-range={{price_range}} "><span
+              class="d-flex justify-content-center">{{c.name}}</span></a>
           {%endif%}
         </div>
         {%endfor%}
         {%endif%}
-        
-        {%else%}
-        {% for c in categories%}
-        {% if c.parent is None%}
-        <div class="collapse" id="refinements-filter-subjects">
-          {%if not keyword and not category%}
-           <a href="{% url 'store:search' %}?category={{c.slug}} "><span class="d-flex justify-content-center">{{c.name}}</span></a>
-          {%elif not price_range%}
-          <a href="{% url 'store:search' %}?category={{c.slug}}&keyword={{keyword}} "><span class="d-flex justify-content-center">{{c.name}}</span></a>
-          {%else %}
-          <a href="{% url 'store:search' %}?category={{c.slug}}&keyword={{keyword}}&price-range={{price_range}} "><span class="d-flex justify-content-center">{{c.name}}</span></a>
-          {%endif%}
-        </div>
-        {% endif %}
-        {%endfor%}
-        {%endif%}
-
-
       </div>
       <div class="collapse " id="refinements-filter" data-bs-toggle="collapse" href="#refinements-filter-prices">
         <span class="d-flex justify-content-center">Prices</span>
         <div class="collapse" id="refinements-filter-prices">
-          
+
           {%if not keyword and not category%}
-           <a href="{% url 'store:search' %}?price-range=1 "><span class="d-flex justify-content-center">Under $5</span></a>
+          <a href="{% url 'store:search' %}?price-range=1 "><span class="d-flex justify-content-center">Under
+              $5</span></a>
           {%elif not keyword%}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=1 "><span class="d-flex justify-content-center">Under $5</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=1 "><span
+              class="d-flex justify-content-center">Under $5</span></a>
           {%else %}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=1 "><span class="d-flex justify-content-center">Under $5</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=1 "><span
+              class="d-flex justify-content-center">Under $5</span></a>
           {%endif%}
         </div>
         <div class="collapse" id="refinements-filter-prices">
           {%if not keyword and not category%}
-           <a href="{% url 'store:search' %}?price-range=2 "><span class="d-flex justify-content-center">$5 - $10</span></a>
+          <a href="{% url 'store:search' %}?price-range=2 "><span class="d-flex justify-content-center">$5 -
+              $10</span></a>
           {%elif not keyword%}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=2 "><span class="d-flex justify-content-center">$5 - $10</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=2 "><span
+              class="d-flex justify-content-center">$5 - $10</span></a>
           {%else %}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=2 "><span class="d-flex justify-content-center">$5 - $10</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=2 "><span
+              class="d-flex justify-content-center">$5 - $10</span></a>
           {%endif%}
         </div>
         <div class="collapse" id="refinements-filter-prices">
           {%if not keyword and not category%}
-           <a href="{% url 'store:search' %}?price-range=3 "><span class="d-flex justify-content-center">$10 - $25</span></a>
+          <a href="{% url 'store:search' %}?price-range=3 "><span class="d-flex justify-content-center">$10 -
+              $25</span></a>
           {%elif not keyword%}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=3 "><span class="d-flex justify-content-center">$10 - $25</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=3 "><span
+              class="d-flex justify-content-center">$10 - $25</span></a>
           {%else %}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=3 "><span class="d-flex justify-content-center">$10 - $25</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=3 "><span
+              class="d-flex justify-content-center">$10 - $25</span></a>
           {%endif%}
         </div>
         <div class="collapse" id="refinements-filter-prices">
           {%if not keyword and not category%}
-           <a href="{% url 'store:search' %}?price-range=4 "><span class="d-flex justify-content-center">$25-$50</span></a>
+          <a href="{% url 'store:search' %}?price-range=4 "><span
+              class="d-flex justify-content-center">$25-$50</span></a>
           {%elif not keyword%}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=4 "><span class="d-flex justify-content-center">$25-$50</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=4 "><span
+              class="d-flex justify-content-center">$25-$50</span></a>
           {%else %}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=4 "><span class="d-flex justify-content-center">$25-$50</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=4 "><span
+              class="d-flex justify-content-center">$25-$50</span></a>
           {%endif%}
         </div>
         <div class="collapse" id="refinements-filter-prices">
           {%if not keyword and not category%}
-           <a href="{% url 'store:search' %}?price-range=5 "><span class="d-flex justify-content-center">Over %50</span></a>
+          <a href="{% url 'store:search' %}?price-range=5 "><span class="d-flex justify-content-center">Over
+              %50</span></a>
           {%elif not keyword%}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=5"><span class="d-flex justify-content-center">Over %50</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&price-range=5"><span
+              class="d-flex justify-content-center">Over %50</span></a>
           {%else %}
-          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=5"><span class="d-flex justify-content-center">Over %50</span></a>
+          <a href="{% url 'store:search' %}?category={{category.slug}}&keyword={{keyword}}&price-range=5"><span
+              class="d-flex justify-content-center">Over %50</span></a>
           {%endif%}
         </div>
       </div>

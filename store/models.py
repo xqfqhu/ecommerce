@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
-from itertools import chain
+
 class ProductManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
@@ -27,8 +27,11 @@ class Category(models.Model):
                 c_list.extend(more)
         return c_list
     def recurse_children(self):
-        c_list = self._recurse_for_children(self)
-        return c_list
+        instant_children = self.children.all()
+        c_list = []
+        for instant_child in instant_children:
+            c_list.extend(self._recurse_for_children(instant_child))
+        return {"instant_children": instant_children, "recurse_children": c_list}
             
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name = 'product', on_delete = models.CASCADE)
