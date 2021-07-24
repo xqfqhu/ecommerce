@@ -57,11 +57,13 @@ def conduct_search(request):
     category_slug = request.GET.get('category')
     if category_slug != "all":
         category = get_object_or_404(Category, slug = category_slug)
-    
-        children = category.recurse_children()
-        recurse_children = children.get("recurse_children")
-        instant_children = children.get("instant_children")
-        products = products.filter(category__in=recurse_children+[category])
+        
+        recurse_children = category.recurse_children()
+        
+        Category.objects.prefetch_related("children")
+        instant_children = category.children.all()
+        
+        products = products.filter(category__in=recurse_children)
         next_context['category'] = category
         if len(instant_children) != 0:
             next_context['category_children'] = instant_children

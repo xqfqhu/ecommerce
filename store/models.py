@@ -18,20 +18,28 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def _recurse_for_children(self, cat_obj):
-        c_list = [cat_obj]
-        children = cat_obj.children.all()
-        if children.count() != 0:
-            for child in children:
-                more = self._recurse_for_children(child)
-                c_list.extend(more)
-        return c_list
     def recurse_children(self):
-        instant_children = self.children.all()
-        c_list = []
-        for instant_child in instant_children:
-            c_list.extend(self._recurse_for_children(instant_child))
-        return {"instant_children": instant_children, "recurse_children": c_list}
+        
+        recurse_children = Category.objects.raw( '''
+            WITH RECURSIVE recurse_children AS(
+                SELECT id, parent_id
+                FROM store_category
+                WHERE id = %s
+
+                UNION ALL
+
+                SELECT c.id, c.parent_id
+                FROM store_category AS c, recurse_children AS rc
+                WHERE c.parent_id = rc.id
+            )
+            SELECT * FROM recurse_children
+        ''', [self.id])
+        
+        # c_list = []
+        # for instant_child in instant_children:
+        #     c_list.extend(self._recurse_for_children(instant_child))
+        
+        return recurse_children
             
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name = 'product', on_delete = models.CASCADE)
