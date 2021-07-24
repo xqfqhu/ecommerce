@@ -1,4 +1,4 @@
-{% extends "../../store/base.html" %}
+{% extends "../../base.html" %}
 {% block title %}Edit Addresses{% endblock %}
 
 {% block content %}
@@ -25,6 +25,9 @@
     {{ form.town_city }}
     <label class="small fw-bold">{{ form.postcode.label}}</label>
     {{ form.postcode }}
+    <label class="small fw-bold">{{ form.country.label}}</label>
+    {{ form.country }}
+
     <button class="btn btn-primary btn-block py-2 mb-4 mt-5 fw500 w-100" type="submit">Save Changes</button>
   </form>
 
