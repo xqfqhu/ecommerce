@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import Category, Product
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
+    list_display = ['name', 'slug','id']
     prepopulated_fields = {'slug': ('name',)}
     # slug will be the same as name
 @admin.register(Product)
