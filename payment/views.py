@@ -92,7 +92,7 @@ def payment_complete(request):
             address2=response.result.purchase_units[0].shipping.address.admin_area_2,
             postal_code=response.result.purchase_units[0].shipping.address.postal_code,
             country_code=response.result.purchase_units[0].shipping.address.country_code,
-            total_paid = Decimal(response.result.purchase_units[0].amount.value),
+            total_paid = float(response.result.purchase_units[0].amount.value),
             order_key=response.result.id,
             payment_option="paypal",
             billing_status=True,

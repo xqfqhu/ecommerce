@@ -34,7 +34,7 @@ class Basket():
     def get_subtotal_price(self):
         total = 0
         for item in self.basket.values():
-            total += float(item['price']) * int(item['qty'])
+            total += float(item['price']) * float(item['qty'])
         return total
     def get_delivery_price(self):
         subtotal = self.get_subtotal_price()
