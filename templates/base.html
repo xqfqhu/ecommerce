@@ -47,12 +47,12 @@
                             </a>
                             <ul class="dropdown-menu rounded-0 border-0" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{%url 'store:store_home'%}">All</a></li>
-                                {% for c in categories %}
-                                {% if c.parent is None%}
+                                {% for c in root_categories %}
+                                
                                 <li {% if category.slug == c.slug %}class="selected" {% endif %}>
                                     <a class="dropdown-item"  href="{%url 'store:search'%}?category={{c.slug}}">{{ c.name|title }}</a>
                                 </li>
-                                {% endif %}
+
                                 {% endfor %}
                             </ul>
                         </li>
@@ -137,12 +137,12 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav me-auto mb-2 mb-md-0">
                             <li><a class="dropdown-item" href="{%url 'store:store_home'%}">All</a></li>
-                            {% for c in categories %}
-                            {% if c.parent is None%}
+                            {% for c in root_categories %}
+
                             <li {% if category.slug == c.slug %}class="selected" {% endif %}>
                                 <a class="dropdown-item"  href="{%url 'store:search'%}?category={{c.slug}}">{{ c.name|title }}</a>
                             </li>
-                            {% endif %}
+
                             {% endfor %}
                         </ul>
                     </div>

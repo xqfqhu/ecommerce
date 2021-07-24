@@ -15,7 +15,12 @@ def categories(request):
     return {
         'categories':Category.objects.all()
     }
-
+def root_categories(request):
+    
+    return  {
+        'root_categories':Category.objects.filter(parent=None)
+    }
+    
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug = slug, in_stock = True)
 
@@ -41,13 +46,12 @@ def conduct_search(request):
             next_context['keyword'] = keyword
     else:
         keyword = ""
-    if keyword != "":
-        products = Product.products.filter(title__contains=keyword) | \
-            Product.products.filter(author__contains=keyword) | \
-                Product.products.filter(compiler__contains = keyword) | \
-                    Product.products.filter(description__contains=keyword)
-    else:
-        products = Product.products.all()
+    
+    products = Product.products.filter(title__contains=keyword) | \
+        Product.products.filter(author__contains=keyword) | \
+            Product.products.filter(compiler__contains = keyword) | \
+                Product.products.filter(description__contains=keyword)
+
 
     
     category_slug = request.GET.get('category')
