@@ -138,7 +138,7 @@ def add_address(request):
     return render(request, 'account/user/add_address.html', {'form':address_form})
 @login_required
 def view_address(request):
-    addresses = Address.objects.filter(customer=request.user)
+    addresses = Address.objects.filter(customer=request.user).order_by("-default")
     return render(request, "account/user/addresses.html", {"addresses": addresses})
 
 
