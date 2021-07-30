@@ -1,0 +1,17 @@
+.img-product {
+  position: relative;
+}
+
+.like-button {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  background:white;
+  opacity: 50%;
+  border-color:black !important;
+  border-radius: 30px !important;
+
+}
+.bi{
+    opacity:100% !important;
+}
