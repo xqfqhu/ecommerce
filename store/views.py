@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product
 from .forms import searchForm
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, JsonResponse
 # Create your views here.
 
 
 def all_products(request):
-    products = Product.products.all()
+    products = Product.products.all().prefetch_related("users_wishlist")
     return render(request, 'store/index.html', {'products': products})
 
 
@@ -98,6 +99,18 @@ def conduct_search(request):
 
     
     return response
-                
+@login_required
+def edit_wishlist(request):
+    if request.POST.get('action') == 'post':
+        product_id = str(request.POST.get('productid'))
+        product = get_object_or_404(Product, id = product_id)
+        if product.users_wishlist.filter(id = request.user.id).exists():
+            product.users_wishlist.remove(request.user)
+            wishlist_action = "remove"
+        else:
+            product.users_wishlist.add(request.user)
+            wishlist_action = "add"
+        response = JsonResponse({'wishlist_action':wishlist_action})
+        return response
             
     
