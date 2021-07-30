@@ -178,3 +178,9 @@ def set_default(request, address_id):
         return redirect("payment:delivery_address")
 
     return redirect("account:addresses")
+
+@login_required
+def view_wishlist(request):
+    wishlist = request.user.user_wishlist.all()
+    
+    return render(request, 'account/user/wishlist.html', {"wishlist":wishlist})
