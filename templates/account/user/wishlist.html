@@ -1,0 +1,72 @@
+{% extends "../../base.html" %}
+{% load static %}
+{% block title %} Your Orders {%endblock%}
+{%block content%}
+
+<main class='pt-3'>
+    <div class='container style = ' max-width: 1000px>
+        <div class='col-12'>
+            <h1 class='h2'> Your Wishlist </h1>
+        </div>
+        <div class='col-12 d-flex justify-content-between'>
+            <div>Manage your Wishlist</div>
+        </div>
+        </hr>
+    </div>
+    <div class="container">
+
+        {% if not wishlist%}
+        <p class="card-text">No products have been added to your wishlist yet</p>
+        {%else%}
+        {% for product in wishlist  %}
+
+        <div class="card mb-3 rounded-0" id="card{{product.id}}">
+            <div class="row g-0">
+                <div class="col-md-2">
+                    
+                    <img class="img-fluid d-block p-2" width="135px" src="{{ product.image.url }}"
+                        alt="{{ product.image.alt_text }}" />
+                    
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h5 class="card-title">{{product.title}}</h5>
+                        <p class="card-text">{{product.description}}</p>
+                        <p class="card-text"><small class="text-muted">${{product.price}}</small></p>
+                        <button type="button" class="btn btn-primary fw500 btn-sm" id="remove-button" value="{{product.id}}">Remove from Wishlist</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+    </div>
+
+</main>
+
+<script>
+    
+    $(document).on('click', '#remove-button', function (e) {
+      const productid = $(this).val();
+      e.preventDefault();
+
+      $.ajax({
+        type: 'POST',
+        url: '{% url "store:edit_wishlist" %}',
+        data: {
+          productid: productid,
+
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (jsonReturned) {
+            document.getElementById("card"+productid).remove();
+
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+</script>
+{%endblock%}
