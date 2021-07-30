@@ -8,5 +8,6 @@ urlpatterns = [
     path('item/<slug:slug>/', views.product_detail, name = 'product_detail'),
     
     path("search", views.conduct_search, name="search"),
+    path("edit_wishlist", views.edit_wishlist, name="edit_wishlist"),
     
 ]
