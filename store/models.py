@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.conf import settings
 
 class ProductManager(models.Manager):
     def get_queryset(self):
@@ -62,6 +63,7 @@ class Product(models.Model):
     # triggered and recorded when added
     updated = models.DateTimeField(auto_now = True)
     # triggered and recorded when updated
+    users_wishlist = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="user_wishlist", blank = True)
     objects = models.Manager()
     products = ProductManager()
     class Meta:
