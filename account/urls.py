@@ -24,5 +24,6 @@ urlpatterns = [
     path('delete_address/<slug:address_id>', views.delete_address, name = 'delete_address'),
     path('edit_address/<slug:address_id>', views.edit_address, name = 'edit_address'),
     path('set_default/<slug:address_id>', views.set_default, name = 'set_default'),
-    path('dashboard/user_orders',views.account_user_orders, name = 'user_orders')
+    path('dashboard/user_orders',views.account_user_orders, name = 'user_orders'),
+    path('dashboard/user_wishlist',views.view_wishlist, name = 'user_wishlist'),
 ]
