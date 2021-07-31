@@ -18,9 +18,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Order',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('full_name', models.CharField(help_text='Required', max_length=50, verbose_name='full name')),
-                ('email', models.CharField(blank=True, help_text='Required', max_length=255, verbose_name='full name')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('full_name', models.CharField(help_text='Required',
+                 max_length=50, verbose_name='full name')),
+                ('email', models.CharField(blank=True, help_text='Required',
+                 max_length=255, verbose_name='full name')),
                 ('address1', models.CharField(max_length=250)),
                 ('address2', models.CharField(max_length=250)),
                 ('city', models.CharField(max_length=100)),
@@ -29,11 +32,13 @@ class Migration(migrations.Migration):
                 ('country_code', models.CharField(blank=True, max_length=4)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
-                ('total_paid', models.DecimalField(decimal_places=2, max_digits=5)),
+                ('total_paid', models.DecimalField(
+                    decimal_places=2, max_digits=5)),
                 ('order_key', models.CharField(max_length=200)),
                 ('payment_option', models.CharField(blank=True, max_length=200)),
                 ('billing_status', models.BooleanField(default=False)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='order_user', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='order_user', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ('-created',),
@@ -42,11 +47,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='OrderItem',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('price', models.DecimalField(decimal_places=2, max_digits=5)),
                 ('quantity', models.PositiveIntegerField(default=1)),
-                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='order.order')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='order_items', to='store.product')),
+                ('order', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, related_name='items', to='order.order')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='order_items', to='store.product')),
             ],
         ),
     ]

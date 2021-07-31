@@ -4,22 +4,24 @@ from django.utils.translation import gettext_lazy as _
 
 from store.models import Product
 # Create your models here.
+
+
 class Order(models.Model):
     user = models.ForeignKey(
-        to = settings.AUTH_USER_MODEL,
-        on_delete = models.CASCADE,
-        related_name = 'order_user'
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='order_user'
     )
     full_name = models.CharField(
-        verbose_name = _('full name'),
-        help_text = _('Required'),
-        max_length = 50,
+        verbose_name=_('full name'),
+        help_text=_('Required'),
+        max_length=50,
     )
     email = models.CharField(
-        verbose_name = _('full name'),
-        help_text = _('Required'),
-        max_length = 255,
-        blank = True
+        verbose_name=_('full name'),
+        help_text=_('Required'),
+        max_length=255,
+        blank=True
     )
     address1 = models.CharField(max_length=250)
     address2 = models.CharField(max_length=250)
@@ -38,25 +40,25 @@ class Order(models.Model):
         verbose_name = "Order"
         verbose_name_plural = "Orders"
         ordering = ('-created',)
+
     def __str__(self):
         return str(self.created)
 
 
-
 class OrderItem(models.Model):
     order = models.ForeignKey(
-        to = Order,
-        on_delete = models.CASCADE,
-        related_name = 'items'
+        to=Order,
+        on_delete=models.CASCADE,
+        related_name='items'
     )
 
     product = models.ForeignKey(
-        to = Product,
-        on_delete = models.CASCADE,
-        related_name = 'order_items'
+        to=Product,
+        on_delete=models.CASCADE,
+        related_name='order_items'
     )
     price = models.DecimalField(max_digits=5, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
+
     def __str__(self):
         return str(self.id)
-    

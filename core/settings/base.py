@@ -67,10 +67,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'store.views.categories', # this makes store.views.categories available to all templates
+                'store.views.categories',
+                # this makes store.views.categories available to all templates
                 'basket.views.basket',
                 'store.views.search',
-                'store.views.root_categories', 
+                'store.views.root_categories',
             ],
         },
     },

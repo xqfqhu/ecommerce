@@ -17,7 +17,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(db_index=True, max_length=225)),
                 ('slug', models.SlugField(max_length=225, unique=True)),
             ],
@@ -28,7 +29,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Product',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=225)),
                 ('author', models.CharField(max_length=225)),
                 ('description', models.TextField(blank=True)),
@@ -39,8 +41,10 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product', to='store.category')),
-                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_creator', to=settings.AUTH_USER_MODEL)),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='product', to='store.category')),
+                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='product_creator', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ('-created',),

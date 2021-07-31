@@ -16,25 +16,36 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='userbase',
-            options={'verbose_name': 'Account', 'verbose_name_plural': 'Accounts'},
+            options={'verbose_name': 'Account',
+                     'verbose_name_plural': 'Accounts'},
         ),
         migrations.CreateModel(
             name='Address',
             fields=[
                 ('id', models.UUIDField(primary_key=True, serialize=False)),
-                ('full_name', models.CharField(max_length=150, verbose_name='Full Name')),
+                ('full_name', models.CharField(
+                    max_length=150, verbose_name='Full Name')),
                 ('phone', models.CharField(max_length=50, verbose_name='Phone Number')),
-                ('postcode', models.CharField(max_length=50, verbose_name='Postcode')),
-                ('address_line', models.CharField(max_length=255, verbose_name='Address Line 1')),
-                ('address_line2', models.CharField(max_length=255, verbose_name='Address Line 2')),
-                ('town_city', models.CharField(max_length=150, verbose_name='Town/City/State')),
+                ('postcode', models.CharField(
+                    max_length=50, verbose_name='Postcode')),
+                ('address_line', models.CharField(
+                    max_length=255, verbose_name='Address Line 1')),
+                ('address_line2', models.CharField(
+                    max_length=255, verbose_name='Address Line 2')),
+                ('town_city', models.CharField(
+                    max_length=150, verbose_name='Town/City/State')),
                 ('state', localflavor.us.models.USStateField(max_length=2)),
                 ('country', django_countries.fields.CountryField(max_length=2)),
-                ('delivery_instructions', models.CharField(max_length=255, verbose_name='Delivery Instructions')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created at')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Updated at')),
-                ('default', models.BooleanField(default=False, verbose_name='Default')),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='customer', to=settings.AUTH_USER_MODEL)),
+                ('delivery_instructions', models.CharField(
+                    max_length=255, verbose_name='Delivery Instructions')),
+                ('created_at', models.DateTimeField(
+                    auto_now_add=True, verbose_name='Created at')),
+                ('updated_at', models.DateTimeField(
+                    auto_now=True, verbose_name='Updated at')),
+                ('default', models.BooleanField(
+                    default=False, verbose_name='Default')),
+                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='customer', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'Address',
