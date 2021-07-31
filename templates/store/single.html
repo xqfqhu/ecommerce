@@ -42,11 +42,24 @@
                 <option value="">4</option>
               </select>
             </div>
-            <div class="col-6 text-end">
-              <button type="button" id="add-button" value="{{product.id}}" class="btn btn-secondary btn-sm">
+          </div>
+          <div class="row p-3">
+              
+              <form action="{%url 'store:edit_wishlist'%}" method="post" class="edit-wishlist-form">
+              {% csrf_token %} 
+              <button type="submit button" name="productid" value="{{product.id}}" class="btn btn-light fw500 edit-wishlist-button">
+                {%if request.user in product.users_wishlist.all%}
+                Remove from wish list
+                {% else %}
+                Add to wish list
+                {%endif%}
+              </button>
+              </form>
+            
+              <button type="button" id="add-basket-button" value="{{product.id}}" class="btn btn-success fw500 add-basket-button">
                 Add to basket
               </button>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -54,14 +67,14 @@
   </div>
 </div>
 <script>
-  $(document).on('click', '#add-button', function (e) {
+  $(document).on('click', '#add-basket-button', function (e) {
     e.preventDefault();
 
     $.ajax({
       type: 'POST',
       url: '{% url "basket:basket_add" %}',
       data: {
-        productid: $('#add-button').val(),
+        productid: $('#add-basket-button').val(),
         productqty: $('#select option:selected').text(),
         csrfmiddlewaretoken: "{{csrf_token}}",
         action: 'post'
@@ -74,5 +87,7 @@
     });
   })
 </script>
+
+
 
 {% endblock %}
