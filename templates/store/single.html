@@ -9,85 +9,94 @@
 {%endblock%}
 {% block content %}
 <div class="container">
-  <div class="row g-3">
-    <div class="col-md-5 col-lg-5 order-md-first bg-light">
-      <img class="img-fluid mx-auto d-block" width="200px" alt="Responsive image" src="{{ product.image.url }}" />
-    </div>
-    <div class="col-md-7 col-lg-7 ps-md-3 ps-lg-5">
-      <h1 class="mb-0 h4">{{ product.title }}</h1>
-      {%if product.author != ""%}
+  {%if messages%}
+  <div class="alert alert-warning" alert-"{{message.tags}}" role="alert">
+    {%for message in messages%}
+    {{message|safe}} - <a href="{% url "account:user_wishlist"%}" class="alert-link">Your Wish List</a>
+    {%endfor%}
+  </div>
+    {%endif%}
+    <div class="row g-3">
+      <div class="col-md-5 col-lg-5 order-md-first bg-light">
+        <img class="img-fluid mx-auto d-block" width="200px" alt="Responsive image" src="{{ product.image.url }}" />
+      </div>
+      <div class="col-md-7 col-lg-7 ps-md-3 ps-lg-5">
+        <h1 class="mb-0 h4">{{ product.title }}</h1>
+        {%if product.author != ""%}
 
-      <p><span class="lead">{{ product.author }}</span> (Author)</p>
-      {%elif product.compiler != ""%}
-      <p><span class="lead">{{ product.compiler }}</span> (Compiler)</p>
-      {%endif%}
-      <p>{{ product.description|slice:":355" }}...</p>
-      <div class="border">
-        <div class="col border-bottom">
-          <div class="row p-3">
-            <div class="col-6">Hardback</div>
-            <div class="col-6 text-end">
-              <span class="h4 fw-bold">${{ product.price }}</span>
+        <p><span class="lead">{{ product.author }}</span> (Author)</p>
+        {%elif product.compiler != ""%}
+        <p><span class="lead">{{ product.compiler }}</span> (Compiler)</p>
+        {%endif%}
+        <p>{{ product.description|slice:":355" }}...</p>
+        <div class="border">
+          <div class="col border-bottom">
+            <div class="row p-3">
+              <div class="col-6">Hardback</div>
+              <div class="col-6 text-end">
+                <span class="h4 fw-bold">${{ product.price }}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col">
-          <div class="row p-3">
-            <div class="col-6">
-              <label for="select">Qty</label>
-              <select id="select" class="h6 single-select-dropdown">
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
-                <option value="">4</option>
-              </select>
+          <div class="col">
+            <div class="row p-3">
+              <div class="col-6">
+                <label for="select">Qty</label>
+                <select id="select" class="h6 single-select-dropdown">
+                  <option value="">1</option>
+                  <option value="">2</option>
+                  <option value="">3</option>
+                  <option value="">4</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="row p-3">
-              
+            <div class="row p-3">
+
               <form action="{%url 'store:edit_wishlist'%}" method="post" class="edit-wishlist-form">
-              {% csrf_token %} 
-              <button type="submit button" name="productid" value="{{product.id}}" class="btn btn-light fw500 edit-wishlist-button">
-                {%if request.user in product.users_wishlist.all%}
-                Remove from wish list
-                {% else %}
-                Add to wish list
-                {%endif%}
-              </button>
+                {% csrf_token %}
+                <button type="submit button" name="productid" value="{{product.id}}"
+                  class="btn btn-light fw500 edit-wishlist-button">
+                  {%if request.user in product.users_wishlist.all%}
+                  Remove from wish list
+                  {% else %}
+                  Add to wish list
+                  {%endif%}
+                </button>
               </form>
-            
-              <button type="button" id="add-basket-button" value="{{product.id}}" class="btn btn-success fw500 add-basket-button">
+
+              <button type="button" id="add-basket-button" value="{{product.id}}"
+                class="btn btn-success fw500 add-basket-button">
                 Add to basket
               </button>
-            
+
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<script>
-  $(document).on('click', '#add-basket-button', function (e) {
-    e.preventDefault();
+  <script>
+    $(document).on('click', '#add-basket-button', function (e) {
+      e.preventDefault();
 
-    $.ajax({
-      type: 'POST',
-      url: '{% url "basket:basket_add" %}',
-      data: {
-        productid: $('#add-basket-button').val(),
-        productqty: $('#select option:selected').text(),
-        csrfmiddlewaretoken: "{{csrf_token}}",
-        action: 'post'
-      },
-      success: function (jsonReturned) {
+      $.ajax({
+        type: 'POST',
+        url: '{% url "basket:basket_add" %}',
+        data: {
+          productid: $('#add-basket-button').val(),
+          productqty: $('#select option:selected').text(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (jsonReturned) {
 
-        document.getElementById("basket-qty").innerHTML = jsonReturned.qty
-      },
-      error: function (xhr, errmsg, err) {}
-    });
-  })
-</script>
-
+          document.getElementById("basket-qty").innerHTML = jsonReturned.qty
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+  </script>
 
 
-{% endblock %}
+
+  {% endblock %}
