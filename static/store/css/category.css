@@ -21,3 +21,16 @@
     background-color: #e7e7e7;
     border: 1px solid #e7e7e7
 }
+
+
+
+.like-button {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  background:white;
+  opacity: 50%;
+  border-color:black !important;
+  border-radius: 30px !important;
+
+}
