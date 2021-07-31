@@ -3,6 +3,7 @@ from .models import Category, Product
 from .forms import searchForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
+from django.contrib import messages
 # Create your views here.
 
 
@@ -101,7 +102,12 @@ def conduct_search(request):
     return response
 @login_required
 def edit_wishlist(request):
-    if request.POST.get('action') == 'post':
+    if request.POST:
+        referer = request.META["HTTP_REFERER"]
+        redirect_flag = False
+        if "item" in referer.split("/"):
+            redirect_flag = True
+        
         product_id = str(request.POST.get('productid'))
         product = get_object_or_404(Product, id = product_id)
         if product.users_wishlist.filter(id = request.user.id).exists():
@@ -110,7 +116,12 @@ def edit_wishlist(request):
         else:
             product.users_wishlist.add(request.user)
             wishlist_action = "add"
-        response = JsonResponse({'wishlist_action':wishlist_action})
+            if redirect_flag:
+                messages.success(request, "Added {} to your Wish List".format(product.title))
+        if redirect_flag:
+            response = HttpResponseRedirect(referer)
+        else:
+            response = JsonResponse({'wishlist_action':wishlist_action})
         return response
             
     
