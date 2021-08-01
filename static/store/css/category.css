@@ -22,9 +22,14 @@
     border: 1px solid #e7e7e7
 }
 
+.img-container{
+  position: relative;
+  margin:0;
+  text-align:center;
+  
+}
 
-
-.like-button {
+.img-container .like-button {
   position: absolute;
   top: 2%;
   right: 2%;
@@ -33,4 +38,30 @@
   border-color:black !important;
   border-radius: 30px !important;
 
+}
+
+.img-container .add-basket-button{
+  display: none;
+}
+
+img:hover + .add-basket-button, .add-basket-button:hover {
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    box-sizing: border-box;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:15%;
+    padding:2%;
+    border-radius:0 !important;
+}
+.add-basket-button span{
+  white-space: nowrap;
+  display: inline-block;
+  color: rgb(67, 112, 207);
+  border: 2px solid rgb(67, 112, 207);
+  font-size :120%;
+  text-align:center;
+  width:100%;
 }
