@@ -33,7 +33,30 @@
                         <h5 class="card-title">{{product.title}}</h5>
                         <p class="card-text">{{product.description}}</p>
                         <p class="card-text"><small class="text-muted">${{product.price}}</small></p>
-                        <button type="button" class="btn btn-primary fw500 btn-sm" id="remove-button" value="{{product.id}}">Remove from Wishlist</button>
+                        <div class="col">
+                            <div class="row p-3">
+                                <div class="col-6">
+                                    <label for="select">Qty</label>
+                                    <select id="select{{product.id}}" class="h6 single-select-dropdown">
+                                        <option value="">1</option>
+                                        <option value="">2</option>
+                                        <option value="">3</option>
+                                        <option value="">4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row p-3">
+
+                                <button type="button" class="btn btn-light fw500" id="remove-wishlist-button"
+                                    value="{{product.id}}">Remove from Wishlist</button>
+
+                                <button type="button" id="add-basket-button" value="{{product.id}}"
+                                    class="btn btn-success fw500">
+                                    Add to basket
+                                </button>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,28 +68,22 @@
     </div>
 
 </main>
-
+<script type="text/javascript" src="{%static 'basket/js/add_to_basket.js'%}">
+</script>
+<script type="text/javascript" src="{%static 'account/js/edit_wishlist.js'%}">
+</script>
 <script>
-    
-    $(document).on('click', '#remove-button', function (e) {
-      const productid = $(this).val();
-      e.preventDefault();
-
-      $.ajax({
-        type: 'POST',
-        url: '{% url "store:edit_wishlist" %}',
-        data: {
-          productid: productid,
-
-          csrfmiddlewaretoken: "{{csrf_token}}",
-          action: 'post'
-        },
-        success: function (jsonReturned) {
-            document.getElementById("card"+productid).remove();
-
-        },
-        error: function (xhr, errmsg, err) {}
-      });
+    const add_to_basket_url = "{%url 'basket:basket_add'%}";
+    const edit_wishlist_url = '{% url "store:edit_wishlist" %}';
+    const csrfmiddlewaretoken = "{{csrf_token}}";
+    $(document).on('click', '#add-basket-button', function(e){
+        const productid = $(this).val();
+        const productqty = $("#select" + $(this).val() + " option:selected").text();
+        add_to_basket(e, productid, productqty, add_to_basket_url, csrfmiddlewaretoken, increment_basket_count);
+    })
+    $(document).on('click', '#remove-wishlist-button', function (e) {
+        const productid = $(this).val();
+        edit_wishlist(e, productid, edit_wishlist_url, csrfmiddlewaretoken, remove_card);
     })
 </script>
 {%endblock%}

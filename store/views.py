@@ -103,6 +103,9 @@ def edit_wishlist(request):
         if product.users_wishlist.filter(id=request.user.id).exists():
             product.users_wishlist.remove(request.user)
             wishlist_action = "remove"
+            if redirect_flag:
+                messages.success(
+                    request, "Removed {} to your Wish List".format(product.title))
         else:
             product.users_wishlist.add(request.user)
             wishlist_action = "add"
