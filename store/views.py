@@ -85,6 +85,7 @@ def conduct_search(request):
 
         response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     else:
+        products = products.all().prefetch_related("users_wishlist")
         next_context['products'] = products
         response = render(request, 'store/category.html', next_context)
     return response
