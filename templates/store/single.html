@@ -75,27 +75,17 @@
       </div>
     </div>
   </div>
-  <script>
-    $(document).on('click', '#add-basket-button', function (e) {
-      e.preventDefault();
-
-      $.ajax({
-        type: 'POST',
-        url: '{% url "basket:basket_add" %}',
-        data: {
-          productid: $('#add-basket-button').val(),
-          productqty: $('#select option:selected').text(),
-          csrfmiddlewaretoken: "{{csrf_token}}",
-          action: 'post'
-        },
-        success: function (jsonReturned) {
-
-          document.getElementById("basket-qty").innerHTML = jsonReturned.qty
-        },
-        error: function (xhr, errmsg, err) {}
-      });
-    })
-  </script>
+<script type="text/javascript" src="{%static 'basket/js/add_to_basket.js'%}">
+</script>
+<script>
+  const add_to_basket_url = "{%url 'basket:basket_add'%}";
+  const csrfmiddlewaretoken = "{{csrf_token}}";
+  $(document).on('click', '#add-basket-button', function (e) {
+    const productid = $('#add-basket-button').val();
+    const productqty = $('#select option:selected').text();
+    add_to_basket(e, productid, productqty, add_to_basket_url, csrfmiddlewaretoken, increment_basket_count);
+  })
+</script>
 
 
 
