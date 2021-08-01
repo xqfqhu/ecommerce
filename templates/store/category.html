@@ -142,7 +142,12 @@
     {% for product in products %}
     <div class="col">
       <div class="card shadow-sm">
+        <div class="img-container">
           <img class="img-fluid" alt="Responsive image" src="{{product.image.url}}">
+          <button class="btn btn-light fw500 add-basket-button" type="button" id="add-basket-button"
+            value="{{product.id}}">
+            <span>QUICK ADD</span>
+          </button>
           <button type="button" id="like-button" class="like-button btn btn-outline-secondary" value="{{product.id}}">
             {% if request.user in product.users_wishlist.all %}
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart"
@@ -158,6 +163,7 @@
             </svg>
             {%endif%}
           </button>
+        </div>
         <div class="card-body">
           <p class="card-text">
             <a class=text-dark text-decoration-none href="{{product.get_absolute_url}}">{{product.title}}</a>
@@ -179,11 +185,11 @@
 <script type="text/javascript" src="{%static 'account/js/edit_wishlist.js'%}">
 </script>
 <script>
-    $(document).on('click', '#like-button', function (e) {
-      const productid = $(this).val();
-      const csrfmiddlewaretoken = "{{csrf_token}}";
-      const edit_wishlist_url = '{% url "store:edit_wishlist" %}';
-      edit_wishlist(e, productid, edit_wishlist_url, csrfmiddlewaretoken, change_heart_color);
-    })
+  $(document).on('click', '#like-button', function (e) {
+    const productid = $(this).val();
+    const csrfmiddlewaretoken = "{{csrf_token}}";
+    const edit_wishlist_url = '{% url "store:edit_wishlist" %}';
+    edit_wishlist(e, productid, edit_wishlist_url, csrfmiddlewaretoken, change_heart_color);
+  })
 </script>
 {% endblock %}
