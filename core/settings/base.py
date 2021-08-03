@@ -148,3 +148,10 @@ LOGIN_URL = '/account/login/'
 PASSWORD_RESET_TIMEOUT_DAYS = 5
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CACHES = {
+    'default':{
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION':'127.0.0.1:11211',
+    }
+}
