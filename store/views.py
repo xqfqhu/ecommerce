@@ -4,6 +4,7 @@ from .forms import searchForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib import messages
+from django.core.cache import caches
 # Create your views here.
 
 
@@ -20,9 +21,16 @@ def categories(request):
 
 
 def root_categories(request):
-
+    cache = caches['default']
+    try:
+        root_category = cache.get('root_categories')
+    except:
+        root_category = Category.objects.filter(parent=None)
+    if root_category is None:
+        root_category = Category.objects.filter(parent=None)
+        cache.set('root_categories', root_category, timeout = 60 * 60 * 24)
     return {
-        'root_categories': Category.objects.filter(parent=None)
+        'root_categories': root_category
     }
 
 
