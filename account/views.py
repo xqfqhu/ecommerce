@@ -9,12 +9,13 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth import views as auth_views
-
+from django.conf import settings
 
 from .forms import RegistrationForm, UserLoginForm, UserEditForm, PwdResetForm, pwdResetConfirmForm, AddressForm
 from .models import UserBase, Address
 from .token import account_activation_token
 from order.views import user_orders
+from utility import get_query_cache_wrapper
 # Create your views here.
 
 
@@ -200,9 +201,18 @@ def set_default(request, address_id):
 
     return redirect("account:addresses")
 
+@login_required
+def user_wishlist(request):
+    wishlist = request.user.user_wishlist.all()
+
+    wishlist = get_query_cache_wrapper(
+        wishlist, 
+        "wishlist{}".format(request.user.id),
+        settings.USER_LONGTERM_TIMEOUT
+        )
+    return {"wishlist":wishlist}
 
 @login_required
 def view_wishlist(request):
-    wishlist = request.user.user_wishlist.all()
 
-    return render(request, 'account/user/wishlist.html', {"wishlist": wishlist})
+    return render(request, 'account/user/wishlist.html', user_wishlist(request))

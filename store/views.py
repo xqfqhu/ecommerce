@@ -121,6 +121,13 @@ def edit_wishlist(request):
             if redirect_flag:
                 messages.success(
                     request, "Added {} to your Wish List".format(product.title))
+        
+        update_query_cache_wrapper(
+                request.user.user_wishlist.all(), 
+                "wishlist{}".format(request.user.id),
+                settings.USER_LONGTERM_TIMEOUT
+            )
+            
         if redirect_flag:
             response = HttpResponseRedirect(referer)
         else:
