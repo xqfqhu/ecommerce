@@ -6,5 +6,5 @@ from .models import Order, OrderItem
 def user_orders(request):
     user = request.user
     order = Order.objects.filter(user=user).filter(
-        billing_status=True).prefetch_related("items")
+        billing_status=True)
     return order

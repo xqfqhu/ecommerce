@@ -82,7 +82,8 @@ def dashboard(request):
 
 
 def account_user_orders(request):
-    orders = user_orders(request)
+    orders = user_orders(request).prefetch_related("items", "items__product")
+    
     return render(request, 'account/user/orders.html', {'orders': orders})
 
 
