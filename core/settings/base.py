@@ -72,6 +72,7 @@ TEMPLATES = [
                 'basket.views.basket',
                 'store.views.search',
                 'store.views.root_categories',
+                'account.views.user_wishlist'
             ],
         },
     },
@@ -155,3 +156,6 @@ CACHES = {
         'LOCATION':'127.0.0.1:11211',
     }
 }
+ 
+UNIVERSAL_LONGTERM_TIMEOUT = 60 * 60 * 24
+USER_LONGTERM_TIMEOUT = 60 * 15
