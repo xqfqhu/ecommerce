@@ -149,7 +149,7 @@
             <span>QUICK ADD</span>
           </button>
           <button type="button" id="like-button" class="like-button btn btn-outline-secondary" value="{{product.id}}">
-            {% if request.user in product.users_wishlist.all %}
+            {% if product in wishlist %}
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart"
               viewBox="0 0 16 16">
               <path id="heart_path{{product.id}}"
