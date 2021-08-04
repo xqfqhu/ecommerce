@@ -64,9 +64,12 @@ def conduct_search(request):
     category_slug = request.GET.get('category')
     if category_slug != "all":
         category = get_object_or_404(Category, slug=category_slug)
-
-        recurse_children = category.recurse_children()
-
+        
+        recurse_children = get_query_cache_wrapper(
+            category.recurse_children(),
+            "{}_recurse_children".format(category_slug),
+            settings.UNIVERSAL_LONGTERM_TIMEOUT 
+        )
         Category.objects.prefetch_related("children")
         instant_children = category.children.all()
 
